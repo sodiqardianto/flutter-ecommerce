@@ -1,3 +1,4 @@
+import 'package:ecommerce_chat/pages/detail_chat_page.dart';
 import 'package:ecommerce_chat/pages/home/main_page.dart';
 import 'package:ecommerce_chat/pages/sign_in_page.dart';
 import 'package:ecommerce_chat/pages/sign_up_page.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         '/sign-in': (contex) => SignInPage(),
         '/sign-up': (contex) => SignUpPage(),
         '/home': (context) => MainPage(),
+        '/detail-chat': (context) => DetailChatPage(),
       },
     );
   }
