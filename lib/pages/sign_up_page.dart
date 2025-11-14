@@ -1,5 +1,8 @@
+import 'package:ecommerce_chat/providers/auth_provider.dart';
 import 'package:ecommerce_chat/theme.dart';
+import 'package:ecommerce_chat/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 // import 'package:shamo/providers/auth_provider.dart';
 // import 'package:shamo/theme.dart';
@@ -14,44 +17,42 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController userNameController = TextEditingController(text: '');
   TextEditingController emailController = TextEditingController(text: '');
-
   TextEditingController passwordController = TextEditingController(text: '');
 
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    // handleSignUp() async {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
 
-    //   // if (await authProvider.register(
-    //   //   name: nameController.text,
-    //   //   username: usernameController.text,
-    //   //   email: emailController.text,
-    //   //   password: passwordController.text,
-    //   // )) {
-    //   // Navigator.pushNamed(context, '/home');
-    //   // } else {
-    //   //   ScaffoldMessenger.of(context).showSnackBar(
-    //   //     SnackBar(
-    //   //       backgroundColor: alertColor,
-    //   //       content: Text(
-    //   //         'Gagal Register!',
-    //   //         textAlign: TextAlign.center,
-    //   //       ),
-    //   //     ),
-    //   //   );
-    //   // }
+      if (await authProvider.register(
+        name: nameController.text,
+        username: userNameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: Text('Gagal Register!', textAlign: TextAlign.center),
+          ),
+        );
+      }
 
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // }
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     Widget header() {
       return Container(
@@ -102,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        // controller: nameController,
+                        controller: nameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Your Full Name',
                           hintStyle: subtitleTextStyle,
@@ -147,7 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        // controller: usernameController,
+                        controller: userNameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Your Username',
                           hintStyle: subtitleTextStyle,
@@ -260,9 +261,7 @@ class _SignUpPageState extends State<SignUpPage> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignUp,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -318,8 +317,7 @@ class _SignUpPageState extends State<SignUpPage> {
               usernameInput(),
               emailInput(),
               passwordInput(),
-              // isLoading ? LoadingButton() : signInButton(),
-              signUpButton(),
+              isLoading ? LoadingButton() : signUpButton(),
               Spacer(),
               footer(),
             ],
