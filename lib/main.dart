@@ -7,6 +7,7 @@ import 'package:ecommerce_chat/pages/sign_in_page.dart';
 import 'package:ecommerce_chat/pages/sign_up_page.dart';
 import 'package:ecommerce_chat/pages/splash_page.dart';
 import 'package:ecommerce_chat/providers/auth_provider.dart';
+import 'package:ecommerce_chat/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
