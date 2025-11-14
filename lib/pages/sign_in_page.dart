@@ -1,5 +1,8 @@
+import 'package:ecommerce_chat/providers/auth_provider.dart';
 import 'package:ecommerce_chat/theme.dart';
+import 'package:ecommerce_chat/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 // import 'package:shamo/providers/auth_provider.dart';
 // import 'package:shamo/theme.dart';
@@ -15,41 +18,37 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   TextEditingController emailController = TextEditingController(text: '');
-
   TextEditingController passwordController = TextEditingController(text: '');
 
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    // handleSignIn() async {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
+    handleSignIn() async {
+      setState(() {
+        isLoading = true;
+      });
 
-    //   if (await authProvider.login(
-    //     email: emailController.text,
-    //     password: passwordController.text,
-    //   )) {
-    //     Navigator.pushNamed(context, '/home');
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         backgroundColor: alertColor,
-    //         content: Text(
-    //           'Gagal Login!',
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ),
-    //     );
-    //   }
+      if (await authProvider.login(
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: Text('Gagal Login!', textAlign: TextAlign.center),
+          ),
+        );
+      }
 
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // }
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     Widget header() {
       return Container(
@@ -168,9 +167,7 @@ class _SignInPageState extends State<SignInPage> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignIn,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -224,8 +221,7 @@ class _SignInPageState extends State<SignInPage> {
               header(),
               emailInput(),
               passwordInput(),
-              // isLoading ? LoadingButton() : signInButton(),
-              signInButton(),
+              isLoading ? LoadingButton() : signInButton(),
               Spacer(),
               footer(),
             ],

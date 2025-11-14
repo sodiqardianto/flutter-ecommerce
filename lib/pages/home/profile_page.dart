@@ -1,11 +1,21 @@
+import 'package:ecommerce_chat/models/user_model.dart';
+import 'package:ecommerce_chat/providers/auth_provider.dart';
 import 'package:ecommerce_chat/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel? user = authProvider.user;
+
+    if (user == null) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     Widget header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -17,7 +27,11 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               children: [
                 ClipOval(
-                  child: Image.asset('assets/image_profile.png', width: 64),
+                  child:
+                      (user.profilePhotoUrl == null ||
+                          user.profilePhotoUrl!.isEmpty)
+                      ? Image.asset('assets/image_profile.png', width: 64)
+                      : Image.network(user.profilePhotoUrl!, width: 64),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -25,14 +39,14 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hallo, Sodiq',
+                        'Hallo, ${user.name}',
                         style: primaryTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semiBold,
                         ),
                       ),
                       Text(
-                        '@sodiqardianto',
+                        '@${user.username}',
                         style: subtitleTextStyle.copyWith(fontSize: 16),
                       ),
                     ],

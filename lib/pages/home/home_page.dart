@@ -1,13 +1,23 @@
+import 'package:ecommerce_chat/models/user_model.dart';
+import 'package:ecommerce_chat/providers/auth_provider.dart';
 import 'package:ecommerce_chat/theme.dart';
 import 'package:ecommerce_chat/widgets/product_card.dart';
 import 'package:ecommerce_chat/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel? user = authProvider.user;
+
+    if (user == null) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -22,14 +32,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Halo, Sodiq ',
+                    'Hallo, ${user.name}',
                     style: primaryTextStyle.copyWith(
                       fontSize: 24,
                       fontWeight: semiBold,
                     ),
                   ),
                   Text(
-                    '@sodiqardianto',
+                    '@${user.username}',
                     style: subtitleTextStyle.copyWith(fontSize: 16),
                   ),
                 ],
@@ -41,7 +51,11 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage('assets/image_profile.png'),
+                  image:
+                      (user.profilePhotoUrl == null ||
+                          user.profilePhotoUrl!.isEmpty)
+                      ? AssetImage('assets/image_profile.png') as ImageProvider
+                      : NetworkImage(user.profilePhotoUrl!),
                 ),
               ),
             ),
